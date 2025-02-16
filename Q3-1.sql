@@ -11,7 +11,7 @@ CREATE TABLE approvals (
     -- 외래 키 설정: 결재를 요청한 사용자의 ID (users 테이블의 id 참조)
     CONSTRAINT fk_approval_requestor FOREIGN KEY (requestor_id) REFERENCES users(id) ON DELETE CASCADE,
     -- 외래 키 설정: 결재를 요청받은 사용자의 ID (users 테이블의 id 참조)
-    CONSTRAINT fk_approval_approver FOREIGN KEY (approver_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_approval_approver FOREIGN KEY (approver_id) REFERENCES users(id) ON DELETE CASCADE
 )
 
 CREATE TABLE rejected_approvals (
@@ -21,9 +21,8 @@ CREATE TABLE rejected_approvals (
     created_at         DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 반려 시간
     updated_at         DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- 반려 사유가 추후에 변경될 수도 있으므로 추가
 
-    -- 외래 키 설정: approvals 테이블의 id를 참조
-    -- 해당 결재 내용이 삭제되면 반려 결재 내용도 삭제되게끔 cascade 적용
-    CONSTRAINT fk_rejection_approval FOREIGN KEY (approval_id) REFERENCES approvals(id) ON DELETE CASCADE,
+    -- 외래 키 설정: 원본 결재 ID (approvals 테이블의 id를 참조)
+    CONSTRAINT fk_rejection_approval FOREIGN KEY (approval_id) REFERENCES approvals(id) ON DELETE CASCADE
 )
 
 /**
