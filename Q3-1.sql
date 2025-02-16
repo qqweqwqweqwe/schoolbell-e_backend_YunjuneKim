@@ -30,9 +30,9 @@ CREATE TABLE approval_logs (
     approval_id            BIGINT UNSIGNED NOT NULL, -- 결재 요청 ID (FK)
     approver_id            BIGINT UNSIGNED , -- 결재 처리 담당자 ID (FK)
     status                 ENUM('PENDING', 'APPROVED', 'REJECTED') NOT NULL, -- 결재 상태
-    title                  VARCHAR(255) NOT NULL, -- 이전 결재 제목
-    content                TEXT NOT NULL, -- 변경된 결재 요청 내용
-    created_at             DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 처리 시간
+    title                  VARCHAR(255) NOT NULL, -- 결재 제목
+    content                TEXT NOT NULL, -- 결재 내용
+    created_at             DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 생성 시간간
 
     -- 외래 키 설정: 결재 ID (approval 테이블의 id를 참조)
     FOREIGN KEY (approval_id) REFERENCES approval(id) ON DELETE CASCADE,
