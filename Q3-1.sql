@@ -34,20 +34,22 @@ CREATE TABLE rejected_approvals (
 결재자 변경 상태 추적
 **/
 CREATE TABLE approval_logs (
-    id                 BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, -- 결재 로그 ID
-    approval_id        BIGINT UNSIGNED NOT NULL, -- 결재 요청 ID (FK)
-    old_approvel_id        BIGINT UNSIGNED NOT NULL, -- 결재를 처리한 사용자 ID (FK)
-    new_approvel_id        BIGINT UNSIGNED NOT NULL, -- 결재를 처리한 사용자 ID (FK)
-    old_status             ENUM('PENDING', 'APPROVED', 'REJECTED') NOT NULL, -- 결재 처리 유형
-    new_status             ENUM('PENDING', 'APPROVED', 'REJECTED') NOT NULL, -- 결재 처리 유형
-    old_title              VARCHAR(255) NOT NULL, -- 결재 제목
-    new_title              VARCHAR(255) NOT NULL, -- 결재 제목
-    old_content            TEXT NOT NULL, -- 결재 요청 내용
-    new_content            TEXT NOT NULL, -- 결재 요청 내용
-    created_at         DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 처리 시간
+    id                     BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, -- 결재 로그 ID
+    approval_id            BIGINT UNSIGNED NOT NULL, -- 결재 요청 ID (FK)
+    old_approver_id        BIGINT UNSIGNED NOT NULL, -- 이전 결재 처리 담당자 ID (FK)
+    new_approver_id        BIGINT UNSIGNED NOT NULL, -- 변경된 결재 처리 담당자 ID (FK)
+    old_status             ENUM('PENDING', 'APPROVED', 'REJECTED') NOT NULL, -- 이전 결재 상태
+    new_status             ENUM('PENDING', 'APPROVED', 'REJECTED') NOT NULL, -- 변경된 결재 상태
+    old_title              VARCHAR(255) NOT NULL, -- 이전 결재 제목
+    new_title              VARCHAR(255) NOT NULL, -- 변경된 결재 제목
+    old_content            TEXT NOT NULL, -- 이전 결재 요청 내용
+    new_content            TEXT NOT NULL, -- 변경된 결재 요청 내용
+    created_at             DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 처리 시간
 
-    -- 외래 키 설정: approval 테이블의 id를 참조
+    -- 외래 키 설정: 결재 ID (approval 테이블의 id를 참조)
     CONSTRAINT fk_logs_approval FOREIGN KEY (approval_id) REFERENCES approval(id) ON DELETE CASCADE,
-    -- 외래 키 설정: 처리한 사용자 ID (users 테이블의 id를 참조)
-    CONSTRAINT fk_logs_action_by FOREIGN KEY (action_by) REFERENCES users(id) ON DELETE RESTRICT,
+    -- 외래 키 설정: 결재 처리 담당자 ID (users 테이블의 id를 참조)
+    CONSTRAINT fk_logs_action_by FOREIGN KEY (old_approver_id) REFERENCES users(id) ON DELETE RESTRICT,
+    CONSTRAINT fk_logs_action_by FOREIGN KEY (new_approver_id) REFERENCES users(id) ON DELETE RESTRICT,
+
 )
